@@ -1,0 +1,198 @@
+<html>
+    <head>
+        <title>6-1.简易购物车</title>
+    </head>
+    <body>
+        <table border="1" width="100%" >
+            <tr style="background-color: skyblue">
+                <th>编号</th>
+                <th>名称</th>
+                <th>单价（元）</th>
+                <th>数量</th>
+                <th>总价</th>
+            </tr>
+            <tr>
+                <td>A01</td>
+                <td>零食</td>
+                <td><input type="text" id="price1" name="price1" value="5" readonly>元</td>
+                <td><input type="number" id="quantity1">个</td>
+                <td><input type="text" id="total1" >元</td>
+            </tr>
+            <tr>
+                <td>A02</td>
+                <td>玩具</td>
+                <td><input type="text" id="price2" name="price2" value="10" readonly>元</td>
+                <td><input type="number" id="quantity2" >个</td>
+                <td><input type="text" id="total2" >元</td>
+            </tr>
+            <tr>
+                <td>A03</td>
+                <td>日用品</td>
+                <td><input type="text" id="price3" name="price3" value="20" readonly>元</td>
+                <td><input type="number" id="quantity3" >个</td>
+                <td><input type="text" id="total3" >元</td>
+            </tr>
+            <tr>
+                <td colspan="5" style="text-align: center;">共<input type="text" id="totalPrice">元</td>
+            </tr>
+            <tr>
+                <td colspan="5" style="text-align: center;"><input type="button" id="button1" value="计算金额" onclick="totalPricef()"></td>
+            </tr>
+            <tr>
+                <td colspan="5" style="text-align: center;">
+                    请选择地址:
+                    <select id="address" onchange="addressChange()">
+                        <option value="-">-</option>
+                        <option value="地址1">地址1</option>
+                        <option value="地址2">地址2</option>
+                    </select>
+                    请选择配送方式:
+                    <select id="delivery">
+                        <option value="-">-</option>
+                        <option value="门前取件">门前取件</option>
+                        <option value="小区门卫">小区门卫</option>
+                        <option value="菜鸟驿站">菜鸟驿站</option>
+                        <option value="其他方法">其他方法</option>
+                    </select>
+                    &nbsp;&nbsp;请输入电话号码:
+                    <input type="text" id="phone">
+                    &nbsp;&nbsp;是否有会员:
+                    <input type="radio" name="vip" value="no" checked onchange="radioChange()">否
+                    <input type="radio" name="vip" value="yes" onchange="radioChange()">是
+                    &nbsp;&nbsp;请输入会员号码:
+                    <input type="text" id="vipNumber" disabled>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5" style="text-align: center;">
+                    <input type="button" id="button2" value="提交" onclick="submitTable()">
+                </td>
+            </tr>
+        </table>
+        <script>
+            var quantity1 = document.getElementById("quantity1")
+            var quantity2 = document.getElementById("quantity2")
+            var quantity3 = document.getElementById("quantity3")
+            var price1 = document.getElementById("price1")
+            var price2 = document.getElementById("price2")
+            var price3 = document.getElementById("price3")
+            var total1 = document.getElementById("total1")
+            var total2 = document.getElementById("total2")
+            var total3 = document.getElementById("total3")
+            var totalPrice = document.getElementById("totalPrice")
+            var address = document.getElementById("address")
+            var delivery = document.getElementById("delivery")
+            var vip = document.getElementsByName("vip")
+            var vipNumber = document.getElementById("vipNumber")
+            var phone = document.getElementById("phone")
+            var istotalPrice = true
+            // 2.单价为不可更改状态，点击计算金额显示总额，若没有输入则数量总价显示为 0；
+            function totalPricef(){
+                var quan1 = parseInt(quantity1.value) || 0
+                var quan2 = parseInt(quantity2.value) || 0
+                var quan3 = parseInt(quantity3.value) || 0
+                var sum = quan1+quan2+quan3
+               if(sum==0){
+                    quantity1.value = 0
+                    quantity2.value = 0
+                    quantity3.value = 0
+                    total1.value = 0
+                    total2.value = 0
+                    total3.value = 0
+                    totalPrice.value = 0
+               }else{
+                    istotalPrice = false
+                    total1.value =  parseInt(price1.value) * quan1
+                    total2.value =  parseInt(price2.value) * quan2
+                    total3.value =  parseInt(price3.value) * quan3
+                    totalPrice.value = parseInt(price1.value) * quan1 
+                    + parseInt(price2.value) * quan2 
+                    + parseInt(price3.value) * quan3
+               }
+            }
+            // 3.选择地址有两个选项；“地址 1”，“地址 2”；配送方式一共有四个选项“门前取件”，“小区门卫”，“菜鸟驿站”，“其他方法”
+            // 4.选择“地址 1”时，配送方式有“门前取件”，“菜鸟驿站”，“其他方法”三种方法。
+            // 5.选择“地址 2”时，配送方式有“小区门卫”，“其他方法”两种方法。
+            function addressChange(){
+                if(address.value=='地址1'){
+                    delivery.innerHTML = '<option value="门前取件">门前取件</option>'
+                    + '<option value="菜鸟驿站">菜鸟驿站</option>'
+                    + '<option value="其他方法">其他方法</option>'
+                } else if(address.value=='地址2'){
+                    delivery.innerHTML = '<option value="小区门卫">小区门卫</option>'
+                    + '<option value="其他方法">其他方法</option>'
+                } else {
+                    delivery.innerHTML = '<option value="-">-</option>'
+                    + '<option value="小区门卫">小区门卫</option>'
+                    + '<option value="门前取件">门前取件</option>'
+                    + '<option value="菜鸟驿站">菜鸟驿站</option>'
+                    + '<option value="其他方法">其他方法</option>'
+                }
+            }
+
+            // 6.会员选择否时，“请输入会员号码”为不可编辑状态。
+            // 7.会员选择是时，“请输入会员号码”为可编辑状态。
+            function radioChange(){
+                if(vip[0].checked){
+                    vipNumber.disabled = true
+                } else {
+                    vipNumber.disabled = false
+                }
+            }
+            // 8.点击提交时，没有入力的项目会弹出提示。
+            // 9.点击提交时，所有项目全部入力会显示如下内容
+            function submitTable(){
+                var message = "这个页面的内容" + "\n请执行以下操作：\n"
+                var qua1 = parseInt(quantity1.value) || 0
+                var qua2 = parseInt(quantity2.value) || 0
+                var qua3 = parseInt(quantity3.value) || 0
+                var sum1 = qua1+qua2+qua3
+                var count = 0
+                var isvalid = false
+                var message2 = "这个页面的内容" + "\n请确认以下信息：\n"
+               if(sum1==0){
+                    isvalid = true
+                    count ++ 
+                    message = message + count +".请至少购买一件商品\n"
+                }else{
+                    message2 = message2 + "1.编号A01的商品"+qua1+"个\n"
+                    message2 = message2 + "2.编号A02的商品"+qua2+"个\n"
+                    message2 = message2 + "3.编号A03的商品"+qua3+"个\n"
+                }
+                if(istotalPrice){
+                    isvalid = true
+                    count ++ 
+                    message = message + count +".请计算购买金额\n"
+                }else{
+                    message2 = message2 + "共计"+totalPrice.value+"元\n"
+                }
+                if(address.value=="-"){
+                    isvalid = true
+                    count ++ 
+                    message = message + count +".请选择地址\n"
+                }else{
+                    message2 = message2 + "您的地址是:" + address.value 
+                    +"("+ delivery.value + ")\n"
+                }
+                if(!phone.value.trim()){
+                    isvalid = true
+                    count ++ 
+                    message = message + count +".请输入电话号码\n"
+                }else{
+                    message2 = message2 + "您的电话号码是:" + phone.value +"\n"
+                }
+                message2 = message2 + "是否持有会员:" 
+                if(vip[0].checked){
+                    message2 = message2 + "否" 
+                }else{
+                    message2 = message2 + "是" 
+                }
+                if(isvalid){
+                    alert(message)
+                }else{
+                    alert(message2)
+                }
+            }
+        </script>
+    </body>
+</html>
